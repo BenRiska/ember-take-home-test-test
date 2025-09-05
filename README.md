@@ -83,9 +83,10 @@ npm test
 
 - **Framework**: Next.js 15 with TypeScript
 - **Styling**: Tailwind CSS
-- **Testing**: Jest with React Testing Library
+- **Testing**: Jest with React Testing Library and jest-cucumber for BDD
 - **Architecture**: App Router with modern React patterns
-- **Precision**: decimal.js for accurate financial calculations and consistency across the app
+- **Date Handling**: date-fns library for robust date operations
+- **Precision**: Custom rounding utilities for accurate financial calculations
 
 ## Date Handling Strategy
 
@@ -97,37 +98,31 @@ We use ISO 8601 format throughout the application for the following reasons:
 - **Financial Standard**: Used in accounting and financial systems
 - **Human Readable**: Clear and unambiguous format
 
-### **Custom Date Utilities vs. External Libraries**
-We implemented custom date utility functions instead of using libraries like date-fns for several reasons:
+### **Using date-fns Library**
+We use the `date-fns` library for all date operations throughout the application:
 
-#### **Why Custom Utils:**
-- **Financial Precision**: Built specifically for depreciation calculations with exact control over behavior
-- **Lightweight**: No external dependencies (~2KB vs ~13KB for date-fns)
-- **Focused API**: Only the functions we need for depreciation logic
-- **Full Control**: We understand and control every aspect of date handling
-- **Bundle Size**: Important for financial applications where every KB matters
+#### **Why date-fns:**
+- **Robust & Reliable**: Battle-tested library with excellent TypeScript support
+- **Modular**: Import only the functions we need, keeping bundle size optimized
+- **Immutable**: All functions return new Date objects, preventing side effects
+- **Comprehensive**: Handles edge cases, leap years, and timezone considerations
+- **Financial Grade**: Used by many financial applications for its accuracy
 
-#### **What We Built:**
-- `getTodayISO()`: Get today's date in ISO format
-- `formatDateToISO()` / `parseISODate()`: Convert between Date objects and ISO strings
-- `addDaysToISO()` / `addYearsToISO()`: Date arithmetic for depreciation periods
-- `daysDifference()`: Calculate days between dates for pro-rata calculations
-- `getDaysInYear()`: Handle leap years correctly
-- `formatDateForDisplay()`: Human-readable formatting for UI
-- Year boundary functions: `getStartOfYearISO()` / `getEndOfYearISO()`
+#### **Functions We Use:**
+- `parseISO()` / `format()`: Convert between Date objects and ISO strings
+- `addYears()` / `subDays()`: Date arithmetic for depreciation periods
+- `differenceInDays()`: Calculate days between dates for pro-rata calculations
+- `startOfYear()` / `endOfYear()`: Year boundary calculations
+- `isAfter()` / `isBefore()`: Date comparisons for period logic
+- `getYear()`: Extract year for multi-year calculations
 
-#### **When We Might Consider External Libraries:**
-- If we need timezone handling
-- If we need complex date formatting beyond our needs
-- If we need relative date calculations ("2 months ago")
-- If we need date parsing from various input formats
-
-### **Implementation Benefits:**
+#### **Implementation Benefits:**
 - **Consistent**: All dates handled the same way across the app
 - **Testable**: Pure functions are easy to unit test
-- **Maintainable**: Centralized date logic in one module
+- **Maintainable**: Leverages well-documented, stable library
 - **Type Safe**: Full TypeScript support with proper interfaces
 - **Financial Grade**: Handles leap years and edge cases correctly
+- **Future-Proof**: Easy to extend with additional date functionality
 
 ## Assumptions & Notes
 
