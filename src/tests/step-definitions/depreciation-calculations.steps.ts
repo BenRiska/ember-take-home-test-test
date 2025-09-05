@@ -5,7 +5,7 @@ import {
 import { RawAsset, AssetWithDepreciation } from '@/lib/types';
 import { ExpectedDepreciationResult, RawTableRow } from '../types/feature-data';
 
-const feature = loadFeature('./src/tests/depreciation.feature');
+const feature = loadFeature('./src/tests/features/depreciation.feature');
 
 defineFeature(feature, (test) => {
   let assets: RawAsset[] = [];
