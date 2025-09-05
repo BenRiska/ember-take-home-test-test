@@ -11,6 +11,7 @@
 
 ### Technical Approach
 - Use Next.js with TypeScript and Tailwind CSS
+- Use date-fns library for all date operations and formatting
 - Implement daily pro-rata calculations with high precision
 - Round only for display (2 decimal places), not during calculations
 - Handle leap years and calendar days correctly
@@ -38,6 +39,7 @@
 - Don't over-abstract interfaces
 - Don't add more calculation methods beyond the two required
 - Don't add complex error handling beyond basic validation
+- Don't create custom date utilities when date-fns provides everything needed
 - Don't use advanced date picker libraries (keep it simple)
 
 ### UI Complexity

@@ -1,10 +1,29 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import assetsData from '@/data/assets.json';
+import { AssetsApiResponse } from '@/lib/types';
+import { processAssetsWithDepreciation } from '@/lib/calculations';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    // Return the asset data with proper headers
-    return NextResponse.json(assetsData, {
+    const { searchParams } = new URL(request.url);
+    const dateParam = searchParams.get('date');
+
+    if (!dateParam) {
+      return NextResponse.json(
+        { error: 'Date parameter is required' },
+        { status: 400 }
+      );
+    }
+
+    // Calculate depreciation for each asset
+    const assetsWithDepreciation = processAssetsWithDepreciation(assetsData, dateParam);
+
+    const response: AssetsApiResponse = {
+      assets: assetsWithDepreciation,
+      calculationDate: dateParam,
+    };
+
+    return NextResponse.json(response, {
       status: 200,
       headers: {
         'Content-Type': 'application/json',

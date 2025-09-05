@@ -87,6 +87,48 @@ npm test
 - **Architecture**: App Router with modern React patterns
 - **Precision**: decimal.js for accurate financial calculations and consistency across the app
 
+## Date Handling Strategy
+
+### **Format Standard: ISO 8601 (YYYY-MM-DD)**
+We use ISO 8601 format throughout the application for the following reasons:
+- **International Standard**: Universally recognized and unambiguous
+- **API Compatibility**: Works seamlessly with REST APIs and databases
+- **Sortable**: Naturally sorts chronologically
+- **Financial Standard**: Used in accounting and financial systems
+- **Human Readable**: Clear and unambiguous format
+
+### **Custom Date Utilities vs. External Libraries**
+We implemented custom date utility functions instead of using libraries like date-fns for several reasons:
+
+#### **Why Custom Utils:**
+- **Financial Precision**: Built specifically for depreciation calculations with exact control over behavior
+- **Lightweight**: No external dependencies (~2KB vs ~13KB for date-fns)
+- **Focused API**: Only the functions we need for depreciation logic
+- **Full Control**: We understand and control every aspect of date handling
+- **Bundle Size**: Important for financial applications where every KB matters
+
+#### **What We Built:**
+- `getTodayISO()`: Get today's date in ISO format
+- `formatDateToISO()` / `parseISODate()`: Convert between Date objects and ISO strings
+- `addDaysToISO()` / `addYearsToISO()`: Date arithmetic for depreciation periods
+- `daysDifference()`: Calculate days between dates for pro-rata calculations
+- `getDaysInYear()`: Handle leap years correctly
+- `formatDateForDisplay()`: Human-readable formatting for UI
+- Year boundary functions: `getStartOfYearISO()` / `getEndOfYearISO()`
+
+#### **When We Might Consider External Libraries:**
+- If we need timezone handling
+- If we need complex date formatting beyond our needs
+- If we need relative date calculations ("2 months ago")
+- If we need date parsing from various input formats
+
+### **Implementation Benefits:**
+- **Consistent**: All dates handled the same way across the app
+- **Testable**: Pure functions are easy to unit test
+- **Maintainable**: Centralized date logic in one module
+- **Type Safe**: Full TypeScript support with proper interfaces
+- **Financial Grade**: Handles leap years and edge cases correctly
+
 ## Assumptions & Notes
 
 - Assets are hardcoded (no database required)

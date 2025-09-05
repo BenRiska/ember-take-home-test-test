@@ -1,30 +1,33 @@
 import { useState, useEffect } from 'react';
-import { Asset } from '@/lib/types';
+import { AssetWithDepreciation, AssetsApiResponse } from '@/lib/types';
 
 interface UseAssetsReturn {
-  assets: Asset[];
+  assets: AssetWithDepreciation[];
   loading: boolean;
   error: string | null;
-  refetch: () => void;
+  refetch: (date: string) => void;
 }
 
-export function useAssets(): UseAssetsReturn {
-  const [assets, setAssets] = useState<Asset[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+export function useAssets(selectedDate: string): UseAssetsReturn {
+  const [assets, setAssets] = useState<AssetWithDepreciation[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchAssets = async () => {
+  const fetchAssets = async (date: string) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch('/api/assets');
+      const url = new URL('/api/assets', window.location.origin);
+      url.searchParams.set('date', date);
+
+      const response = await fetch(url.toString());
       if (!response.ok) {
         throw new Error('Failed to fetch assets');
       }
 
-      const data = await response.json();
-      setAssets(data);
+      const data: AssetsApiResponse = await response.json();
+      setAssets(data.assets);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
       setError(errorMessage);
@@ -35,8 +38,10 @@ export function useAssets(): UseAssetsReturn {
   };
 
   useEffect(() => {
-    fetchAssets();
-  }, []);
+    if (selectedDate) {
+      fetchAssets(selectedDate);
+    }
+  }, [selectedDate]);
 
   return {
     assets,

@@ -1,8 +1,7 @@
 Feature: Depreciation for fixed asset expenses
 
   Background:
-    Given a business is looking to track depreciation
-    And I have the following assets:
+    Given I have the following assets:
       | assetName | purchaseDate | purchaseAmount | depreciationMethod |
       | Laptop A  | 2020-04-15   | 1200           | straight-line      |
       | Forklift  | 2020-01-03   | 24000          | reducing-balance   |
